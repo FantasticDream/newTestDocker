@@ -1,17 +1,19 @@
-# 指定基础镜像为Java开发环境
-# 使用官方的Java 8镜像作为基础镜像
+ 基于Java镜像构建容器
 FROM openjdk:8-jdk-alpine
 
 # 设置工作目录
 WORKDIR /app
 
-# 下载并解压Maven安装包
-RUN apt-get update && apt-get install -y maven
+# 将本地的pom.xml文件复制到容器中
+COPY pom.xml .
 
-# 将项目文件复制到容器中
-COPY . /app
+# 安装Maven依赖
+RUN mvn dependency:go-offline -B
 
-# 构建Maven依赖
+# 将所有源代码复制到容器中
+COPY src ./src/main/java
+
+# 运行Maven命令进行构建
 RUN mvn clean package -DskipTests
 
 # 运行Spring Boot应用
