@@ -1,4 +1,4 @@
- 基于Java镜像构建容器
+# 基于Java镜像构建容器
 FROM openjdk:8-jdk-alpine
 
 # 设置工作目录
