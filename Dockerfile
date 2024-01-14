@@ -1,11 +1,18 @@
 # 指定基础镜像为Java开发环境
-FROM maven:latest
+# 使用官方的Java 8镜像作为基础镜像
+FROM openjdk:8-jdk-alpine
 
 # 设置工作目录
 WORKDIR /app
 
-# 将本地项目文件复制到容器中的/app目录下
+# 下载并解压Maven安装包
+RUN apk add --no-cache curl && \
+    curl -sSL https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz | tar xz -C /usr/local && \
+    ln -s /usr/local/apache-maven-3.6.3 /usr/local/maven
+
+# 将项目文件复制到容器中
 COPY . /app
+
 
 # 构建Maven依赖
 RUN mvn clean package -DskipTests
