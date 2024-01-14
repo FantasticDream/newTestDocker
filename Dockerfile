@@ -6,13 +6,10 @@ FROM openjdk:8-jdk-alpine
 WORKDIR /app
 
 # 下载并解压Maven安装包
-RUN apk add --no-cache curl && \
-    curl -sSL https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz | tar xz -C /usr/local && \
-    ln -s /usr/local/apache-maven-3.6.3 /usr/local/maven
+RUN apt-get update && apt-get install -y maven
 
 # 将项目文件复制到容器中
 COPY . /app
-
 
 # 构建Maven依赖
 RUN mvn clean package -DskipTests
